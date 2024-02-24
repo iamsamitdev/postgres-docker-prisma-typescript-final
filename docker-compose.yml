@@ -1,0 +1,25 @@
+version: '3.9'
+
+# Define Networks
+networks:
+  prisma_typescript_network:
+    name: prisma_typescript_network
+    driver: bridge
+
+# Define Services
+services:
+  # Postgres Database
+  postgresdb:
+    image: postgres:15.6
+    container_name: postgresdb
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: prismatypedb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "6432:5432"
+    restart: always
+    networks:
+      - prisma_typescript_network

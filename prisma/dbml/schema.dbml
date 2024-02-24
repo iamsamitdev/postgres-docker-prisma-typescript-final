@@ -1,0 +1,74 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id Int [pk, increment]
+  email String [unique, not null]
+  firstName String [not null]
+  lastName String [not null]
+  social Json
+  courses CourseEnrollment [not null]
+  testResults TestResult [not null]
+  testsGraded TestResult [not null]
+}
+
+Table Course {
+  id Int [pk, increment]
+  name String [not null]
+  courseDetails String
+  members CourseEnrollment [not null]
+  tests Test [not null]
+}
+
+Table CourseEnrollment {
+  createdAt DateTime [default: `now()`, not null]
+  role UserRole [not null]
+  userId Int [not null]
+  courseId Int [not null]
+  user User [not null]
+  course Course [not null]
+
+  indexes {
+    (userId, courseId) [pk]
+  }
+}
+
+Table Test {
+  id Int [pk, increment]
+  updatedAt DateTime [not null]
+  name String [not null]
+  date DateTime [not null]
+  courseId Int [not null]
+  course Course [not null]
+  testResults TestResult [not null]
+}
+
+Table TestResult {
+  id Int [pk, increment]
+  createdAt DateTime [default: `now()`, not null]
+  result Int [not null]
+  studentId Int [not null]
+  student User [not null]
+  graderId Int [not null]
+  gradedBy User [not null]
+  testId Int [not null]
+  test Test [not null]
+}
+
+Enum UserRole {
+  STUDENT
+  TEACHER
+}
+
+Ref: CourseEnrollment.userId > User.id
+
+Ref: CourseEnrollment.courseId > Course.id
+
+Ref: Test.courseId > Course.id
+
+Ref: TestResult.studentId > User.id
+
+Ref: TestResult.graderId > User.id
+
+Ref: TestResult.testId > Test.id
