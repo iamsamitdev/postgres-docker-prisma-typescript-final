@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUsers = exports.createUser = void 0;
+exports.deleteUser = exports.updateUser = exports.getUserById = exports.getUsers = exports.createUser = void 0;
 const client_1 = require("@prisma/client");
 const Joi = __importStar(require("joi"));
 // Create a new express application instance
@@ -88,4 +88,60 @@ const getUsers = (_, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getUsers = getUsers;
+// GET /users/:userId: Get a user by ID
+const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = parseInt(req.params.userId);
+    try {
+        const user = yield prisma.user.findUnique({
+            where: {
+                id: userId,
+            },
+        });
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        res.json(user);
+    }
+    catch (e) {
+        console.error(e);
+        res.status(500).json({ error: "Failed to get user" });
+    }
+});
+exports.getUserById = getUserById;
+// PUT /users/:userId: Update a user by ID
+const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = parseInt(req.params.userId);
+    const userInput = req.body;
+    try {
+        const user = yield prisma.user.update({
+            where: {
+                id: userId,
+            },
+            data: userInput,
+        });
+        res.json(user);
+    }
+    catch (e) {
+        console.error(e);
+        res.status(500).json({ error: "Failed to update user" });
+    }
+});
+exports.updateUser = updateUser;
+// DELETE /users/:userId: Delete a user by ID
+const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = parseInt(req.params.userId);
+    try {
+        yield prisma.user.delete({
+            where: {
+                id: userId,
+            },
+        });
+        res.json({ message: "User deleted" });
+    }
+    catch (e) {
+        console.error(e);
+        res.status(500).json({ error: "Failed to delete user" });
+    }
+});
+exports.deleteUser = deleteUser;
 //# sourceMappingURL=UserController.js.map

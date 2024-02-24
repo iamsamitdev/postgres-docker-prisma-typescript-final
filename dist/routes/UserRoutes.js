@@ -10,5 +10,11 @@ const router = express_1.default.Router();
 router.post('/', UserController_1.createUser);
 // Get all users
 router.get('/', UserController_1.getUsers);
+// Get a user by ID
+router.get('/:userId', UserController_1.getUserById);
+// Update a user by ID
+router.put('/:userId', UserController_1.updateUser);
+// Delete a user by ID
+router.delete('/:userId', UserController_1.deleteUser);
 exports.default = router;
 //# sourceMappingURL=UserRoutes.js.map
