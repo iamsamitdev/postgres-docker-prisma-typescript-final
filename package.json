@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "build": "rimraf dist && tsc",
+    "build": "tsc",
     "postinstall": "prisma generate",
     "ts.check": "tsc --project tsconfig.json",
     "add-build": "git add dist",
